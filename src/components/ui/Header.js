@@ -8,6 +8,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import {Link} from "react-router-dom";
 import { Button } from '@material-ui/core';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 
@@ -55,10 +57,21 @@ function ElevationScroll(props) {
 
 
 const Header = () => {
+
     const classes = useStyles();
-
     const [value,setValue] = useState(0);
+    const [anchorEl,setAnchorEl] = useState(null);
+    const [open,setOpen] = useState(false);
 
+      const handleClick = (e) => {
+        setAnchorEl(e.currentTarget);
+        setOpen(true);
+      }
+
+      const handleClose = (e) =>{
+        setAnchorEl(null);
+        setOpen(false);
+      } 
     const handleChange = (e,value) =>{
         setValue(value)
     }
@@ -87,12 +100,33 @@ const Header = () => {
                 indicatorColor="secondary"
                 >
                     <Tab className={classes.tab} component={Link} to="/"  label="Home"/>
-                    <Tab className={classes.tab} component={Link} to="/service" label="About"/>
+                    <Tab
+                    aria-owns={anchorEl ? "simple-menu" : undefined}
+                    aria-haspopup={anchorEl ? "true" : undefined}
+                     className={classes.tab}
+                      component={Link}
+                      onMouseOver={event=>handleClick(event)}
+                       to="/service"
+                       label="About"
+                     
+                     />
                     <Tab className={classes.tab} component={Link} to="/serviceb" label="Dental Services"/>
                     <Tab className={classes.tab} label="Reviews"/>
                     <Tab className={classes.tab} label="Blog"/>
                     <Tab className={classes.tab} label="Contact Us"/>
                 </Tabs>
+                <Menu
+                 id="simple-menu"
+                  anchorEl={anchorEl}
+                   open={open} 
+                   onClose={handleClose}
+                   MenuListProps = {{ onMouseLeave:handleClose}}
+                   >
+                  <MenuItem onClick={handleClose}>service Item One</MenuItem>
+                  <MenuItem onClick={handleClose}>service Item Two</MenuItem>
+                  <MenuItem onClick={handleClose}>service Item Three</MenuItem>
+                  <MenuItem onClick={handleClose}>service Item Four</MenuItem>
+                </Menu>
             </Toolbar>
         </AppBar>
         </ElevationScroll>
